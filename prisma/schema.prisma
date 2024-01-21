@@ -1,0 +1,96 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Doctor {
+  id             Int              @id @default(autoincrement())
+  name           String
+  DoctorSchedule DoctorSchedule[]
+  deleted        Boolean          @default(false)
+  active         Boolean          @default(true)
+}
+
+model DoctorSchedule {
+  id                        Int                  @id @default(autoincrement())
+  doctor                    Doctor               @relation(fields: [doctorId], references: [id])
+  doctorId                  Int
+  startDate                 DateTime
+  startTime                 Int
+  endDate                   DateTime
+  endTime                   Int
+  consultationTimeInMinutes Int
+  weekdays                  String
+  DoctorScheduleSlot        DoctorScheduleSlot[]
+  deleted                   Boolean              @default(false)
+}
+
+model Patient {
+  id                 Int                  @id @default(autoincrement())
+  name               String
+  DoctorScheduleSlot DoctorScheduleSlot[]
+  deleted            Boolean              @default(false)
+  active             Boolean              @default(true)
+}
+
+model ServiceType {
+  id                             Int                              @id @default(autoincrement())
+  name                           String
+  DoctorScheduleSlot             DoctorScheduleSlot?              @relation(fields: [doctorScheduleSlotId], references: [id])
+  doctorScheduleSlotId           Int?
+  deleted                        Boolean                          @default(false)
+  DoctorScheduleSlotServiceTypes DoctorScheduleSlotServiceTypes[]
+  active                         Boolean                          @default(true)
+}
+
+model VisitReason {
+  id                 Int                  @id @default(autoincrement())
+  name               String
+  deleted            Boolean              @default(false)
+  DoctorScheduleSlot DoctorScheduleSlot[]
+  active             Boolean              @default(true)
+}
+
+model ServiceLocation {
+  id                 Int                  @id @default(autoincrement())
+  name               String
+  deleted            Boolean              @default(false)
+  DoctorScheduleSlot DoctorScheduleSlot[]
+  active             Boolean              @default(true)
+}
+
+model DoctorScheduleSlot {
+  id                             Int                              @id @default(autoincrement())
+  doctorSchedule                 DoctorSchedule                   @relation(fields: [doctorScheduleId], references: [id])
+  doctorScheduleId               Int
+  startTime                      DateTime
+  endTime                        DateTime
+  patient                        Patient?                         @relation(fields: [patientId], references: [id])
+  patientId                      Int?
+  visitReason                    VisitReason?                     @relation(fields: [visitReasonId], references: [id])
+  visitReasonId                  Int?
+  serviceLocation                ServiceLocation?                 @relation(fields: [serviceLocationId], references: [id])
+  serviceLocationId              Int?
+  deleted                        Boolean                          @default(false)
+  ServiceTypes                   ServiceType[]
+  DoctorScheduleSlotServiceTypes DoctorScheduleSlotServiceTypes[]
+}
+
+model DoctorScheduleSlotServiceTypes {
+  doctorScheduleSlot   DoctorScheduleSlot @relation(fields: [doctorScheduleSlotId], references: [id])
+  doctorScheduleSlotId Int
+  serviceType          ServiceType        @relation(fields: [serviceTypeId], references: [id])
+  serviceTypeId        Int
+  deleted              Boolean            @default(false)
+
+  @@id([serviceTypeId, doctorScheduleSlotId])
+  @@index([serviceTypeId])
+  @@index([doctorScheduleSlotId])
+}
