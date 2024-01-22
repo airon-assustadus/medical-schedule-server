@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put } from "@nestjs/common";
 import { PatientService } from "src/services/patient.service";
 import { Patient as PatientModel, Prisma } from "@prisma/client"
 
@@ -9,7 +9,7 @@ export class PatientController {
     ){}
 
     @Get(':id')
-    async findById(@Param('id') id: number): Promise<PatientModel> {
+    async findById(@Param('id', ParseIntPipe) id: number): Promise<PatientModel> {
         const where: Prisma.PatientWhereInput = {
             id
         }
@@ -38,7 +38,7 @@ export class PatientController {
     }
 
     @Put(':id')
-    async update(@Body() data: Prisma.PatientCreateInput, @Param('id') id: number): Promise<PatientModel> {
+    async update(@Body() data: Prisma.PatientCreateInput, @Param('id', ParseIntPipe) id: number): Promise<PatientModel> {
         const where: Prisma.PatientWhereUniqueInput = {
             id
         }
@@ -46,7 +46,7 @@ export class PatientController {
     }
 
     @Delete(':id')
-    async delete(@Param('id') id: number): Promise<PatientModel> {
+    async delete(@Param('id', ParseIntPipe) id: number): Promise<PatientModel> {
         const where: Prisma.PatientWhereUniqueInput = {
             id
         }

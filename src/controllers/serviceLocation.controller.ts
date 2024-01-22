@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put } from "@nestjs/common";
 import { ServiceLocationService } from "src/services/serviceLocation.service";
 import { ServiceLocation as ServiceLocationModel, Prisma } from "@prisma/client"
 
@@ -9,7 +9,7 @@ export class ServiceLocationController {
     ){}
 
     @Get(':id')
-    async findById(@Param('id') id: number): Promise<ServiceLocationModel> {
+    async findById(@Param('id', ParseIntPipe) id: number): Promise<ServiceLocationModel> {
         const where: Prisma.ServiceLocationWhereInput = {
             id
         }
@@ -38,7 +38,7 @@ export class ServiceLocationController {
     }
 
     @Put(':id')
-    async update(@Body() data: Prisma.ServiceLocationCreateInput, @Param('id') id: number): Promise<ServiceLocationModel> {
+    async update(@Body() data: Prisma.ServiceLocationCreateInput, @Param('id', ParseIntPipe) id: number): Promise<ServiceLocationModel> {
         const where: Prisma.ServiceLocationWhereUniqueInput = {
             id
         }
@@ -46,7 +46,7 @@ export class ServiceLocationController {
     }
 
     @Delete(':id')
-    async delete(@Param('id') id: number): Promise<ServiceLocationModel> {
+    async delete(@Param('id', ParseIntPipe) id: number): Promise<ServiceLocationModel> {
         const where: Prisma.ServiceLocationWhereUniqueInput = {
             id
         }

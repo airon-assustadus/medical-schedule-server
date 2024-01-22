@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put } from "@nestjs/common";
 import { DoctorScheduleSlotService } from "src/services/doctorScheduleSlot.service";
 import { DoctorScheduleSlot as DoctorScheduleSlotModel, Prisma } from "@prisma/client"
 import { AvailableSlotsRequest, AvailableSlotsResponse } from "src/types/AvailableSlots";
@@ -10,7 +10,7 @@ export class DoctorScheduleSlotController {
     ){}
 
     @Get(':id')
-    async findById(@Param('id') id: number): Promise<DoctorScheduleSlotModel> {
+    async findById(@Param('id', ParseIntPipe) id: number): Promise<DoctorScheduleSlotModel> {
         const where: Prisma.DoctorScheduleSlotWhereInput = {
             id
         }
@@ -39,7 +39,7 @@ export class DoctorScheduleSlotController {
     }
 
     @Put(':id')
-    async update(@Body() data: Prisma.DoctorScheduleSlotCreateInput, @Param('id') id: number): Promise<DoctorScheduleSlotModel> {
+    async update(@Body() data: Prisma.DoctorScheduleSlotCreateInput, @Param('id', ParseIntPipe) id: number): Promise<DoctorScheduleSlotModel> {
         const where: Prisma.DoctorScheduleSlotWhereUniqueInput = {
             id
         }
@@ -47,7 +47,7 @@ export class DoctorScheduleSlotController {
     }
 
     @Delete(':id')
-    async delete(@Param('id') id: number): Promise<DoctorScheduleSlotModel> {
+    async delete(@Param('id', ParseIntPipe) id: number): Promise<DoctorScheduleSlotModel> {
         const where: Prisma.DoctorScheduleSlotWhereUniqueInput = {
             id
         }

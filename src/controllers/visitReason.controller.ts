@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put } from "@nestjs/common";
 import { VisitReasonService } from "src/services/visitReason.service";
 import { VisitReason as VisitReasonModel, Prisma } from "@prisma/client"
 
@@ -9,7 +9,7 @@ export class VisitReasonController {
     ){}
 
     @Get(':id')
-    async findById(@Param('id') id: number): Promise<VisitReasonModel> {
+    async findById(@Param('id', ParseIntPipe) id: number): Promise<VisitReasonModel> {
         const where: Prisma.VisitReasonWhereInput = {
             id
         }
@@ -38,7 +38,7 @@ export class VisitReasonController {
     }
 
     @Put(':id')
-    async update(@Body() data: Prisma.VisitReasonCreateInput, @Param('id') id: number): Promise<VisitReasonModel> {
+    async update(@Body() data: Prisma.VisitReasonCreateInput, @Param('id', ParseIntPipe) id: number): Promise<VisitReasonModel> {
         const where: Prisma.VisitReasonWhereUniqueInput = {
             id
         }
@@ -46,7 +46,7 @@ export class VisitReasonController {
     }
 
     @Delete(':id')
-    async delete(@Param('id') id: number): Promise<VisitReasonModel> {
+    async delete(@Param('id', ParseIntPipe) id: number): Promise<VisitReasonModel> {
         const where: Prisma.VisitReasonWhereUniqueInput = {
             id
         }

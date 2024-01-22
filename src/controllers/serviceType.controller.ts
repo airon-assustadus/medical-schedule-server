@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put } from "@nestjs/common";
 import { ServiceTypeService } from "src/services/serviceType.service";
 import { ServiceType as ServiceTypeModel, Prisma } from "@prisma/client"
 
@@ -9,7 +9,7 @@ export class ServiceTypeController {
     ){}
 
     @Get(':id')
-    async findById(@Param('id') id: number): Promise<ServiceTypeModel> {
+    async findById(@Param('id', ParseIntPipe) id: number): Promise<ServiceTypeModel> {
         const where: Prisma.ServiceTypeWhereInput = {
             id
         }
@@ -38,7 +38,7 @@ export class ServiceTypeController {
     }
 
     @Put(':id')
-    async update(@Body() data: Prisma.ServiceTypeCreateInput, @Param('id') id: number): Promise<ServiceTypeModel> {
+    async update(@Body() data: Prisma.ServiceTypeCreateInput, @Param('id', ParseIntPipe) id: number): Promise<ServiceTypeModel> {
         const where: Prisma.ServiceTypeWhereUniqueInput = {
             id
         }
@@ -46,7 +46,7 @@ export class ServiceTypeController {
     }
 
     @Delete(':id')
-    async delete(@Param('id') id: number): Promise<ServiceTypeModel> {
+    async delete(@Param('id', ParseIntPipe) id: number): Promise<ServiceTypeModel> {
         const where: Prisma.ServiceTypeWhereUniqueInput = {
             id
         }
